@@ -1,21 +1,31 @@
 version: 0.2
 
+env:
+  variables:
+    REPOSITORY_URI: 363838752048.dkr.ecr.us-west-2.amazonaws.com/appmaicon
+
 phases:
-  # pre_build:
-  #   commands:
-  #     - echo Pré-build...
-  #     - aws --version
-  #     - docker --version
-  #     - aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 363838752048.dkr.ecr.us-west-2.amazonaws.com
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws --version
+      - docker --version
+      - aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin $REPOSITORY_URI
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
   build:
     commands:
-      - echo Construindo a imagem Docker...
+      - echo Build started on `date`
+      - echo Building the Docker image...
       - docker build -t berlofa-apache-php .
-      - docker tag berlofa-apache-php:latest 363838752048.dkr.ecr.us-west-2.amazonaws.com/appmaicon:latest
+      - docker tag berlofa-apache-php:latest $REPOSITORY_URI:latest
+      - docker tag berlofa-apache-php:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
-      - echo Fazendo push da imagem Docker...
-      - docker push 363838752048.dkr.ecr.us-west-2.amazonaws.com/appmaicon:latest
+      - echo Build completed on `date`
+      - echo Pushing the Docker images...
+      - docker push $REPOSITORY_URI:latest
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
 
 artifacts:
   files: '**/*'
