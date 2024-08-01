@@ -1,12 +1,12 @@
 version: 0.2
 
 phases:
-  pre_build:
-    commands:
-      - echo Pré-build...
-      - aws --version
-      - docker --version
-      - aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 363838752048.dkr.ecr.us-west-2.amazonaws.com
+  # pre_build:
+  #   commands:
+  #     - echo Pré-build...
+  #     - aws --version
+  #     - docker --version
+  #     - aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 363838752048.dkr.ecr.us-west-2.amazonaws.com
   build:
     commands:
       - echo Construindo a imagem Docker...
