@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Pré-build...
+      - $(aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <seu-id-de-conta>.dkr.ecr.us-east-1.amazonaws.com)
+  build:
+    commands:
+      - echo Construindo a imagem Docker...
+      - docker build -t minha-imagem-apache-php .
+      - docker tag minha-imagem-apache-php:latest <seu-id-de-conta>.dkr.ecr.us-east-1.amazonaws.com/minha-imagem-apache-php:latest
+  post_build:
+    commands:
+      - echo Fazendo push da imagem Docker...
+      - docker push <seu-id-de-conta>.dkr.ecr.us-east-1.amazonaws.com/minha-imagem-apache-php:latest
+
+artifacts:
+  files: '**/*'
