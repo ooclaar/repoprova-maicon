@@ -4,16 +4,16 @@ phases:
   pre_build:
     commands:
       - echo Pré-build...
-      - $(aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <seu-id-de-conta>.dkr.ecr.us-east-1.amazonaws.com)
+      - $(aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 363838752048.dkr.ecr.us-west-2.amazonaws.com/appmaicon)
   build:
     commands:
       - echo Construindo a imagem Docker...
-      - docker build -t minha-imagem-apache-php .
-      - docker tag minha-imagem-apache-php:latest <seu-id-de-conta>.dkr.ecr.us-east-1.amazonaws.com/minha-imagem-apache-php:latest
+      - docker build -t berlofa-apache-php .
+      - docker tag berlofa-apache-php 363838752048.dkr.ecr.us-west-2.amazonaws.com/appmaicon
   post_build:
     commands:
       - echo Fazendo push da imagem Docker...
-      - docker push <seu-id-de-conta>.dkr.ecr.us-east-1.amazonaws.com/minha-imagem-apache-php:latest
+      - docker push 363838752048.dkr.ecr.us-west-2.amazonaws.com/appmaicon
 
 artifacts:
   files: '**/*'
